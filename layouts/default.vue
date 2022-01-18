@@ -24,7 +24,7 @@ export default {
 
   @include media-breakpoint-up(sm) {
     &__content {
-      margin-top: pxToRem(90);
+      margin-top: pxToRem(80);
     }
   }
 }
