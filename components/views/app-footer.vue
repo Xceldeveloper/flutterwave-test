@@ -16,7 +16,7 @@
 export default {};
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 .footer {
   min-height: pxToRem(300);
   display: flex;
@@ -27,24 +27,45 @@ export default {};
     .title {
       display: block;
       text-align: center;
-      font-size: pxToRem(25);
+      font-size: pxToRem(20);
+      font-weight: 600;
+
+      @include media-breakpoint-up(md) {
+        font-size: pxToRem(25);
+      }
     }
+
     .text {
       display: block;
-      max-width: 600px;
+      max-width: 90%;
       text-align: center;
-      line-height: pxToRem(27);
-      font-size: pxToRem(18);
-      margin: pxToRem(10);
+      line-height: pxToRem(22);
+      font-size: pxToRem(16);
+      margin: pxToRem(8) auto;
+
+      @include media-breakpoint-up(md) {
+        font-size: pxToRem(18);
+        line-height: pxToRem(27);
+        max-width: 600px;
+        margin: pxToRem(10) auto;
+      }
     }
+
     .button {
       display: block;
       background-color: #000;
       color: #fff;
-      margin:  auto;
-      padding: pxToRem(14) pxToRem(40);
+      margin: auto;
       border-radius: 3px;
+      padding: pxToRem(13) pxToRem(30);
+
+      @include media-breakpoint-up(md) {
+        padding: pxToRem(14) pxToRem(40);
+      }
     }
+  }
+
+  @include media-breakpoint-up(lg) {
   }
 }
 </style>
