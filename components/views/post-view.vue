@@ -35,7 +35,7 @@ export default {};
   background-color: #fff;
   padding: pxToRem(10);
   border-radius: pxToRem(5);
-  gap: 10px;
+  gap: pxToRem(10);
   cursor: pointer;
   display: flex;
 
@@ -81,7 +81,6 @@ export default {};
 
   @include media-breakpoint-up(sm) {
     gap: 0px;
-    margin: pxToRem(10) 0;
     display: block;
     box-shadow: 0px 1px 3px #e5e5e5;
 
