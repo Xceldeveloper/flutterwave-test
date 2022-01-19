@@ -58,7 +58,7 @@ export default {};
   @include media-breakpoint-up(sm) {
       height: pxToRem(80);
     &__content {
-      max-width: 93%;
+      max-width: 90%;
       margin: auto;
        padding: 0 ;
       .nav-bar__logo {
