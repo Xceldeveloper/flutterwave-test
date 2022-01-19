@@ -50,7 +50,7 @@ To see how CSS affects the load time of a webpage we first have to know how the 
 
 <style lang="scss">
 .featured-post {
-  margin: pxToRem(10) auto;
+  margin: pxToRem(20) auto;
   width: 90%;
   max-width: pxToRem(500);
   display: flex;
@@ -102,12 +102,11 @@ To see how CSS affects the load time of a webpage we first have to know how the 
     }
   }
   @include media-breakpoint-up(sm) {
-      margin: pxToRem(40) auto;
+    margin: pxToRem(40) auto;
     width: 100%;
     max-width: none;
     &__details {
-
-        &__body {
+      &__body {
         flex: 1;
         .title {
           font-weight: 900;
@@ -121,11 +120,10 @@ To see how CSS affects the load time of a webpage we first have to know how the 
         }
       }
 
-           &__footer {
+      &__footer {
         margin: none;
         .read-full {
           display: none;
-          
         }
       }
     }
@@ -137,7 +135,6 @@ To see how CSS affects the load time of a webpage we first have to know how the 
     border-radius: pxToRem(5);
     max-width: none;
     flex-direction: row;
-
 
     &__image {
       max-width: 50%;
@@ -161,7 +158,7 @@ To see how CSS affects the load time of a webpage we first have to know how the 
           display: block;
         }
       }
-          &__footer {
+      &__footer {
         margin: none;
         .read-full {
           display: block;
@@ -169,8 +166,6 @@ To see how CSS affects the load time of a webpage we first have to know how the 
           font-weight: 600;
         }
       }
-
- 
     }
   }
 }
