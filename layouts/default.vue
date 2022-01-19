@@ -4,7 +4,7 @@
     <div class="app app__content">
       <Nuxt />
     </div>
-    <div class="footer"></div>
+   <app-footer />
   </div>
 </template>
 
@@ -29,8 +29,5 @@ export default {
   }
 }
 
-.footer {
-  background-color: green;
-  height: 300px;
-}
+
 </style>
