@@ -16,16 +16,15 @@ export default {
 .list-container {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
-  padding:   0;
+  margin: pxToRem(5) auto;
 
   @include media-breakpoint-up(sm) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: pxToRem(40);
-      padding:  pxToRem(80) 0;
-
+    gap: pxToRem(20);
   }
 
   @include media-breakpoint-up(lg) {
+    gap: pxToRem(40);
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
