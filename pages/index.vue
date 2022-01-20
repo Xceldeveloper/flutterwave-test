@@ -1,13 +1,17 @@
 <template>
   <div class="_page">
    <featured-post/>
+
+   <post-lists/>
+
   </div>
 </template>
 
 <script>
+import PostLists from '~/components/custom/post-lists.vue'
 import featuredPost from '~/components/views/featured-post.vue'
 export default {
-  components: { featuredPost },
+  components: { featuredPost, PostLists },
 
 }
 </script>
@@ -17,7 +21,7 @@ export default {
   width: 100%;
 
   @include media-breakpoint-up(sm){
-    width: 93%;
+    width: 90%;
     margin: auto;
    
   }

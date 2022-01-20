@@ -14,7 +14,8 @@
       <div class="featured-post__details__footer">
         <span class="read-time"> 3 min Read</span>
 
-        <button class="button">Read Full
+        <button class="read-full button">
+          Read Full
 
           <span class="mdi mdi-arrow-right"></span>
         </button>
@@ -49,13 +50,16 @@ To see how CSS affects the load time of a webpage we first have to know how the 
 
 <style lang="scss">
 .featured-post {
-  margin: pxToRem(10);
+  margin: pxToRem(20) auto;
+  width: 90%;
+  max-width: pxToRem(500);
   display: flex;
   flex-direction: column;
   gap: pxToRem(10);
 
   &__image {
     max-width: 100%;
+    border-radius: 10px;
   }
 
   &__details {
@@ -74,12 +78,13 @@ To see how CSS affects the load time of a webpage we first have to know how the 
     }
     &__body {
       .title {
-        font-weight: 900;
+        margin-top: 10px;
+        font-weight: 800;
         font-size: pxToRem(22);
         color: $black;
       }
       .article {
-        color: $black20;
+        display: none;
       }
     }
     &__footer {
@@ -91,31 +96,76 @@ To see how CSS affects the load time of a webpage we first have to know how the 
       .read-time {
         color: $black20;
       }
-      button {
-        color: $primary;
-        font-weight: 600;
+      .read-full {
+        display: none;
+      }
+    }
+  }
+  @include media-breakpoint-up(sm) {
+    margin: pxToRem(40) auto;
+    width: 100%;
+    max-width: none;
+    &__details {
+      &__body {
+        flex: 1;
+        .title {
+          font-weight: 900;
+          font-size: pxToRem(22);
+          color: $black;
+        }
+
+        .article {
+          color: $black20;
+          display: block;
+        }
+      }
+
+      &__footer {
+        margin: none;
+        .read-full {
+          display: none;
+        }
       }
     }
   }
 
   @include media-breakpoint-up(lg) {
+    padding: pxToRem(10);
+    box-shadow: 0px 1px 2px #e5e5e5;
+    border-radius: pxToRem(5);
+    max-width: none;
     flex-direction: row;
-    margin: pxToRem(20) 0;
+
     &__image {
       max-width: 50%;
-    }
-  }
-
-  &__details {
-    display: flex;
-    flex-direction: column;
-
-    &__body {
-      flex: 1;
+      border-radius: pxToRem(5);
     }
 
-    &__footer {
-      margin: none;
+    &__details {
+      display: flex;
+      flex-direction: column;
+
+      &__body {
+        flex: 1;
+        .title {
+          font-weight: 900;
+          font-size: pxToRem(22);
+          color: $black;
+        }
+
+        .article {
+          color: $black20;
+          display: block;
+        }
+      }
+      &__footer {
+        margin: none;
+        .read-full {
+          display: block;
+          color: $primary;
+          font-weight: 600;
+        }
+      }
     }
   }
 }

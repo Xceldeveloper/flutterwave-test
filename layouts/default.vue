@@ -4,7 +4,7 @@
     <div class="app app__content">
       <Nuxt />
     </div>
-    <div class="footer"></div>
+   <app-footer />
   </div>
 </template>
 
@@ -24,13 +24,10 @@ export default {
 
   @include media-breakpoint-up(sm) {
     &__content {
-      margin-top: pxToRem(90);
+      margin-top: pxToRem(80);
     }
   }
 }
 
-.footer {
-  background-color: green;
-  height: 300px;
-}
+
 </style>

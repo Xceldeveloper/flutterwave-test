@@ -56,14 +56,14 @@ export default {};
   }
 
   @include media-breakpoint-up(sm) {
-      height: pxToRem(90);
+      height: pxToRem(80);
     &__content {
-      max-width: 93%;
+      max-width: 90%;
       margin: auto;
        padding: 0 ;
       .nav-bar__logo {
-        height: pxToRem(70);
-        width: pxToRem(70);
+        height: pxToRem(60);
+        width: pxToRem(60);
       }
       .nav-bar__actions {
         flex: 1;
