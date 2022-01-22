@@ -1,19 +1,21 @@
 <template>
-  <nuxt-link to="" v-if="post !== false">
+  <nuxt-link :to="`/${post.id}/${post.slug}`"  v-if="post !== false">
     <div class="featured-post">
       <img class="featured-post__image" :src="post.image" alt="" />
       <div class="featured-post__details">
         <div class="featured-post__details__head">
-          <span class="category">{{category}}</span>
+          <span class="category">{{ category }}</span>
           <app-dot-divider />
-          <span class="time">{{fomatTime}}</span>
+          <span class="time">{{ fomatTime }}</span>
         </div>
         <div class="featured-post__details__body">
           <div class="title">{{ post.title }}</div>
           <div class="article" v-html="desc"></div>
         </div>
         <div class="featured-post__details__footer">
-          <span class="read-time"> {{getReadTime(post.content)}} min Read</span>
+          <span class="read-time">
+            {{ getReadTime(post.content) }} min Read</span
+          >
 
           <button class="read-full button">
             Read Full
@@ -32,11 +34,11 @@ import { formatDistance } from "date-fns";
 export default {
   data() {
     return {
-      category:""
+      category: ""
     };
   },
-  methods:{
-     async fetchCategory() {
+  methods: {
+    async fetchCategory() {
       const data = await this.$store.dispatch(
         "posts/getCategories",
         this.post.id
@@ -68,23 +70,25 @@ export default {
       }
     },
 
-        fomatTime() {
-          if(!this.post){return ""}
+    fomatTime() {
+      if (!this.post) {
+        return "";
+      }
       return formatDistance(new Date(this.post.date), new Date(), {
         addSuffix: true
       });
     }
   },
-  watch:{
-  post:{
-      deep:true,
-    immediate:true,
-    handler(val){
-      if(val !== null){
-        this.fetchCategory()
+  watch: {
+    post: {
+      deep: true,
+      immediate: true,
+      handler(val) {
+        if (val !== null) {
+          this.fetchCategory();
+        }
       }
     }
-  }
   }
 };
 </script>
@@ -118,7 +122,7 @@ a {
       .time {
         color: $black20;
         font-size: pxToRem(14);
-          text-transform: capitalize;
+        text-transform: capitalize;
       }
     }
     &__body {
