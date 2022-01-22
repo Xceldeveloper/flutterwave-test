@@ -1,54 +1,102 @@
 <template>
-  <div class="featured-post">
-    <img class="featured-post__image" src="/images/dummy/big.svg" alt="" />
-    <div class="featured-post__details">
-      <div class="featured-post__details__head">
-        <span class="category">Front-end</span>
-        <app-dot-divider />
-        <span class="time">1 Hour Ago</span>
-      </div>
-      <div class="featured-post__details__body">
-        <div class="title">Optimizing CSS for faster page loads</div>
-        <div class="article" v-html="article"></div>
-      </div>
-      <div class="featured-post__details__footer">
-        <span class="read-time"> 3 min Read</span>
+  <nuxt-link :to="`/${post.id}/${post.slug}`"  v-if="post !== false">
+    <div class="featured-post">
+      <img class="featured-post__image" :src="post.image" alt="" />
+      <div class="featured-post__details">
+        <div class="featured-post__details__head">
+          <span class="category">{{ category }}</span>
+          <app-dot-divider />
+          <span class="time">{{ fomatTime }}</span>
+        </div>
+        <div class="featured-post__details__body">
+          <div class="title">{{ post.title }}</div>
+          <div class="article" v-html="post.description"></div>
+        </div>
+        <div class="featured-post__details__footer">
+          <span class="read-time">
+            {{ getReadTime(post.content) }} min Read</span
+          >
 
-        <button class="read-full button">
-          Read Full
+          <button class="read-full button">
+            Read Full
 
-          <span class="mdi mdi-arrow-right"></span>
-        </button>
+            <span class="mdi mdi-arrow-right"></span>
+          </button>
+        </div>
       </div>
     </div>
-  </div>
+  </nuxt-link>
 </template>
 
 <script>
+import { mapGetters } from "vuex";
+import { formatDistance } from "date-fns";
 export default {
   data() {
     return {
-      text: `
-     Not long ago I decided to improve the loading times of my website. It already loads pretty fast, but I knew there was still room for improvement and one of them was CSS loading. I will walk you through the process and show you how you can improve your load times as well.
-
-To see how CSS affects the load time of a webpage we first have to know how the browser converts an HTML document into a functional webpage...
-     `
+      category: ""
     };
   },
-  computed: {
-    article() {
-      const formatText = this.text.replace(/\n/g, "<br>");
-      // if(formatText > 500) {
-      //   return this.text.substring(0, 500) + "...";
-      // }
+  methods: {
+    async fetchCategory() {
+      const data = await this.$store.dispatch(
+        "posts/getCategories",
+        this.post.id
+      );
 
-      return formatText;
+      // console.log(JSON.stringify(data, null, 2));
+      this.category = data.map(cat => {
+        return cat.name;
+      })[0];
+    }
+  },
+  computed: {
+    ...mapGetters("posts", ["posts"]),
+    post() {
+      if (this.posts.length == 0) {
+        return false;
+      }
+      return this.posts[Math.floor(Math.random() * this.posts.length -1) + 0]; 
+    },
+    desc() {
+      if (!this.post) {
+        return "";
+      } else {
+        if (this.post.content.length > 400) {
+          return this.post.content.substring(0, 400) + "...";
+        }
+
+        return this.post.content;
+      }
+    },
+
+    fomatTime() {
+      if (!this.post) {
+        return "";
+      }
+      return formatDistance(new Date(this.post.date), new Date(), {
+        addSuffix: true
+      });
+    }
+  },
+  watch: {
+    post: {
+      deep: true,
+      immediate: true,
+      handler(val) {
+        if (val !== null) {
+          this.fetchCategory();
+        }
+      }
     }
   }
 };
 </script>
 
 <style lang="scss">
+a {
+  text-decoration: none;
+}
 .featured-post {
   margin: pxToRem(20) auto;
   width: 90%;
@@ -74,6 +122,7 @@ To see how CSS affects the load time of a webpage we first have to know how the 
       .time {
         color: $black20;
         font-size: pxToRem(14);
+        text-transform: capitalize;
       }
     }
     &__body {
@@ -117,6 +166,7 @@ To see how CSS affects the load time of a webpage we first have to know how the 
         .article {
           color: $black20;
           display: block;
+          @include max-line(10)
         }
       }
 
@@ -135,6 +185,15 @@ To see how CSS affects the load time of a webpage we first have to know how the 
     border-radius: pxToRem(5);
     max-width: none;
     flex-direction: row;
+
+    ::selection {
+      background: $primary; /* WebKit/Blink Browsers */
+      color: #fff;
+    }
+    ::-moz-selection {
+      background: $primary; /* Gecko Browsers */
+      color: #fff;
+    }
 
     &__image {
       max-width: 50%;

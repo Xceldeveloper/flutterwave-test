@@ -1,14 +1,17 @@
 <template>
   <div class="list-container">
-    <post-view v-for="post in 8" :post="post" :key="post" />
+    <post-view v-for="post in posts" :post="post" :key="post" />
   </div>
 </template>
 
 <script>
 import postView from "../views/post-view.vue";
+import {mapGetters} from 'vuex'
 export default {
   components: { postView },
-  data() {}
+  computed:{
+    ...mapGetters('posts',["posts"])
+  }
 };
 </script>
 
@@ -17,6 +20,15 @@ export default {
   display: grid;
   grid-template-columns: repeat(1, minmax(0, 1fr));
   margin: pxToRem(5) auto;
+
+    ::selection {
+      background: $primary; /* WebKit/Blink Browsers */
+      color: #fff;
+    }
+    ::-moz-selection {
+      background: $primary; /* Gecko Browsers */
+      color: #fff;
+    }
 
   @include media-breakpoint-up(sm) {
     grid-template-columns: repeat(2, minmax(0, 1fr));

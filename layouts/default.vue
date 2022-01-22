@@ -4,30 +4,25 @@
     <div class="app app__content">
       <Nuxt />
     </div>
-   <app-footer />
+    <app-footer />
   </div>
 </template>
 
 <script>
-export default {
-};
+export default {};
 </script>
 
 <style lang="scss" scoped>
 .app {
   min-height: 100vh;
+  overflow: auto;
 
   &__content {
     margin-top: pxToRem(70);
     overflow: auto;
-  }
-
-  @include media-breakpoint-up(sm) {
-    &__content {
+    @include media-breakpoint-up(sm) {
       margin-top: pxToRem(80);
     }
   }
 }
-
-
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="nav-bar">
     <div class=" nav-bar__content">
-      <img class="nav-bar__logo" src="/images/icon.png" />
+      <img @click="$router.go(-1)" class="nav-bar__logo" src="/images/icon.png" />
 
       <div class="nav-bar__actions">
         <img class="button" src="/icons/twitter-logo.svg" alt="" />

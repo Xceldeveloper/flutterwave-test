@@ -1,26 +1,22 @@
 <template>
   <nuxt-link :to="`/${post.id}/${post.slug}`" v-if="post != null">
-    <div class="post-view">
-      <div class="post-view__image">
-        <img :src="post.image" alt="" />
-      </div>
-
-      <div class="post-view-cover">
-        <div class="post-view__cat">
+    <div class="more-post-view">
+      <img class="more-post-view__image" :src="post.image" :alt="post.title" />
+      <div class="more-post-view-cover">
+        <div class="more-post-view__cat">
           <span class="category">{{ category }}</span>
           <app-dot-divider />
           <span class="time">{{ fomatTime }}</span>
         </div>
-        <div class="post-view__title" v-html="post.title"></div>
-        <div class="post-view__article" v-html="desc"></div>
-        <div class="post-view__action">
+        <div class="more-post-view__title" v-html="post.title"></div>
+        <div class="more-post-view__article" v-html="post.description"></div>
+        <div class="more-post-view__action">
           <span class="read-time">
             {{ getReadTime(post.content) }} min Read</span
           >
 
           <button class="read-full button">
             Read Full
-
             <span class="mdi mdi-arrow-right"></span>
           </button>
         </div>
@@ -57,17 +53,6 @@ export default {
     }
   },
   computed: {
-    desc() {
-      if (this.post == null) {
-        return;
-      } else {
-        if (this.post.description.length > 200) {
-          return this.post.description.substring(0, 200) + "...";
-        }
-
-        return this.post.description;
-      }
-    },
     fomatTime() {
       return formatDistance(new Date(this.post.date), new Date(), {
         addSuffix: true
@@ -89,123 +74,95 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-a {
-  text-decoration: none;
-}
-.post-view {
+.more-post-view {
   background-color: #fff;
+  width: 85%;
+  width: pxToRem(200);
   padding: pxToRem(10);
   border-radius: pxToRem(5);
-  gap: pxToRem(10);
+  display: inline-block;
+  margin: 10px 20px 10px 0px;
   cursor: pointer;
-  display: flex;
-
-  .post-view-cover {
-    flex: 1;
-  }
+  box-shadow: 0px 1px 3px #e5e5e5;
+  white-space: normal;
 
   @include media-breakpoint-up(sm) {
-    box-shadow: 0px 1px 3px #e5e5e5;
-    display: block;
+    width: pxToRem(280);
   }
-
-
 
   &__image {
-    max-width: 100%;
-    img {
-      width: pxToRem(110);
-      height: pxToRem(110);
-      object-fit: cover;
-      border-radius: pxToRem(5);
-    }
+    width: 100%;
+    height: pxToRem(120);
+    object-fit: cover;
+    border-radius: inherit;
 
-    @include media-breakpoint-up(sm) {
-      // @include aspect-ratio(16,9);
-      img {
-        width: 100%;
-        height: 100%;
+      @include media-breakpoint-up(sm) {
+        height: pxToRem(180);
       }
-    }
   }
 
-
-
   &__cat {
-    margin-top: pxToRem(5);
-    
+    margin-top: pxToRem(10);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
     .category {
       color: $black30;
       font-weight: 700;
       font-size: pxToRem(14);
-
-      @include media-breakpoint-up(sm) {
-        margin-top: pxToRem(5);
-        color: $black30;
-        font-weight: 700;
-        font-size: pxToRem(14);
-      }
     }
 
     .time {
       color: $black20;
-      font-size: pxToRem(14);
+      font-size: pxToRem(12);
       text-transform: capitalize;
-
-      @include media-breakpoint-up(sm) {
-        color: $black20;
-        font-size: pxToRem(14);
-      }
     }
   }
-
-
 
   &__title {
     font-weight: 600;
     font-size: pxToRem(18);
     color: $black;
-    @include max-line(3);
-       margin-top: pxToRem(5);
+    margin-top: pxToRem(5);
+    @include max-line(2);
+
+    @include media-breakpoint-up(sm) {
+      margin-top: pxToRem(10);
+      @include max-line(2);
+    }
   }
-
-
 
   &__article {
+    color: $black20;
     display: none;
 
     @include media-breakpoint-up(sm) {
-      color: $black20;
       display: block;
-      margin: pxToRem(0) auto pxToRem(20) auto;
       line-height: 21px;
-      @include max-line(3);
+      @include max-line(1);
     }
   }
-
-
 
   &__action {
-    display: none;
+    display: flex;
+    justify-content: space-between;
+    font-size: pxToRem(14);
+    margin-top: pxToRem(10);
 
-    @include media-breakpoint-up(sm) {
-      margin-top: pxToRem(10);
-      display: flex;
-      justify-content: space-between;
-      font-size: pxToRem(14);
-      margin-top: pxToRem(10);
+    .read-time {
+      color: $black20;
+    }
 
-      .read-time {
-        color: $black20;
-      }
+    .read-full {
+      display: none;
+      color: $primary;
+      font-weight: 600;
 
-      .read-full {
+      @include media-breakpoint-up(sm) {
         display: block;
-        color: $primary;
-        font-weight: 600;
       }
     }
   }
-
 }
 </style>
