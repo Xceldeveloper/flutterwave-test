@@ -11,7 +11,7 @@
       <div class="post__content" v-html="content"></div>
       
     </div>
-    <more-post-list :category="categories" />
+    <more-post-list v-if="post != null" :category="categories" />
   </div>
 </template>
 
@@ -36,6 +36,7 @@ export default {
   },
   created() {
     this.$store.dispatch("posts/getPost", this.$route.params.id);
+        this.$store.dispatch("posts/refreshPosts", this.$route.params.id);
   },
   data() {
     return {
@@ -54,7 +55,10 @@ export default {
         this.post.id
       );
       this.categories = data.map(cat => {
-        return cat.name;
+        return {
+          name: cat.name,
+          id: cat.id
+        };
       });
     },
     async fetchAuthors() {
