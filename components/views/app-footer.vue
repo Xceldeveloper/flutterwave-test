@@ -7,13 +7,57 @@
         is easy. Just pay a one time $25 fee and everything is ready to
         go.</span
       >
-      <button class="button">JOIN US</button>
+
+       <span style="visibility:hidden"><flutterwave-pay-button ref="flutterwave" v-bind="paymentData">
+        </flutterwave-pay-button></span>
+
+      <button class="button" @click="$refs.flutterwave.showPaymentModal()">JOIN US</button>
     </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      paymentData: {
+        tx_ref: this.generateReference(),
+        amount: 25,
+        currency: "USD",
+        payment_options: "card",
+        meta: {
+          counsumer_id: "7898",
+          consumer_mac: "kjs9s8ss7dd"
+        },
+        customer: {
+          name: "John Doe",
+          email: "xceldeveloper@gmail.com",
+          phone_number: "0818450***44"
+        },
+        customizations: {
+          title: "Join our team of writers",
+          description: "Family",
+          logo: "https://www.xceldeveloper.com/_nuxt/img/icon.0d9d8b5.jpg"
+        },
+        callback: this.makePaymentCallback,
+        onclose: this.closedPaymentModal
+      }
+    };
+  },
+  methods: {
+    makePaymentCallback(response) {
+      console.log("Pay", response);
+      this.$refs.flutterwave.closePaymentModal(5);
+    },
+    closedPaymentModal() {
+      console.log("payment is closed");
+    },
+    generateReference() {
+      let date = new Date();
+      return date.getTime().toString();
+    }
+  }
+};
 </script>
 
 <style lang="scss">
