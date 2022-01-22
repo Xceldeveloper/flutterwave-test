@@ -10,7 +10,7 @@
         </div>
         <div class="featured-post__details__body">
           <div class="title">{{ post.title }}</div>
-          <div class="article" v-html="desc"></div>
+          <div class="article" v-html="post.description"></div>
         </div>
         <div class="featured-post__details__footer">
           <span class="read-time">
@@ -56,17 +56,17 @@ export default {
       if (this.posts.length == 0) {
         return false;
       }
-      return this.posts[0];
+      return this.posts[Math.floor(Math.random() * this.posts.length -1) + 0]; 
     },
     desc() {
       if (!this.post) {
         return "";
       } else {
-        if (this.post.description.length > 400) {
-          return this.post.description.substring(0, 400) + "...";
+        if (this.post.content.length > 400) {
+          return this.post.content.substring(0, 400) + "...";
         }
 
-        return this.post.description;
+        return this.post.content;
       }
     },
 
@@ -166,6 +166,7 @@ a {
         .article {
           color: $black20;
           display: block;
+          @include max-line(10)
         }
       }
 
