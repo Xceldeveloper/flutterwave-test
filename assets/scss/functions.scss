@@ -31,6 +31,7 @@ $weights: (400, 500, 700);
   overflow: hidden;
   text-overflow: ellipsis;
   display: -webkit-box;
+  line-height: inherit;
   -webkit-line-clamp: $limit; /* number of lines to show */
   line-clamp: $limit;
   -webkit-box-orient: vertical;
