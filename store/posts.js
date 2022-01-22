@@ -37,7 +37,7 @@ export const actions = {
       const {
         data
       } = await this.$axios.get(
-        "https://techcrunch.com/wp-json/wp/v2/posts"
+        "https://techcrunch.com/wp-json/wp/v2/posts/?per_page=20"
       );
       //  console.log(JSON.stringify(data,null,2))
       const posts = data.map(post => {
@@ -59,6 +59,47 @@ export const actions = {
       console.log(JSON.stringify(err));
       return Promise.reject(err);
     }
+  },
+
+  refreshPosts({state,dispatch}){
+    if(process.env.NODE_ENV === 'development'){
+      console.log('refreshing posts...');
+    }
+     if(state.posts.length == 0){
+       console.log('no posts so refresh');
+      dispatch("getAllPosts")
+     }else{
+       console.log('posts already exist');
+     }
+  },
+
+  async fetchPostByCategory({},catId) {
+    console.log('fetching posts by category'+catId);
+     try {
+       const {
+         data
+       } = await this.$axios.get(
+         "https://techcrunch.com/wp-json/wp/v2/posts/?categories=" + catId[0]
+       );
+       //  console.log(JSON.stringify(data,null,2))
+       const posts = data.map(post => {
+         return {
+           id: post.id,
+           date: post.date_gmt,
+           slug: post.slug,
+           link: post.link,
+           title: post.title.rendered,
+           description: post.excerpt.rendered,
+           author: post.author,
+           content: post.content.rendered,
+           image: post.jetpack_featured_media_url
+         };
+       });
+       return posts;
+     } catch (err) {
+      //  console.log(JSON.stringify(err));
+       return Promise.reject(err);
+     }
   },
 
   async getPost({
@@ -88,7 +129,7 @@ export const actions = {
       };
 
 
-      console.log(JSON.stringify(data, null, 2))
+    //  console.log(JSON.stringify(data, null, 2))
       commit("SET_VIEWING_POST", post);
       return data;
     } catch (err) {
@@ -107,7 +148,7 @@ export const actions = {
       } = await this.$axios.get(
         `https://techcrunch.com/wp-json/tc/v1/users/${id}`
       );
-      console.log(JSON.stringify(data,null,2))
+      //console.log(JSON.stringify(data,null,2))
       //  console.log(JSON.stringify(data,null,2))
     //   const post = {
     //     id: data.id,
@@ -121,7 +162,7 @@ export const actions = {
     //   commit("SET_VIEWING_POST", post);
       return data;
     } catch (err) {
-      console.log(JSON.stringify(err));
+      //console.log(JSON.stringify(err));
       return Promise.reject(err);
     }
   },
@@ -136,6 +177,7 @@ export const actions = {
 
       return data.map((category) => {
         return {
+          id: category.id,
           name: category.name,
           slug: category.slug
         }

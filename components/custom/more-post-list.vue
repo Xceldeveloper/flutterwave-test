@@ -1,8 +1,11 @@
 <template>
 <div class="more">
-   <span class="more__title">More Articles</span>
+   <span class="more__title"  >More Articles</span>
+   {{this.category.map(cat => {
+        return cat.id;
+      })}}
     <div class="more__post-list">
-    <more-post-view v-for="(post, index) in 8" :key="index" />
+     <more-post-view v-for="(post, index) in posts" :key="index" :post="post"  />
   </div>
 </div>
 </template>
@@ -10,7 +13,38 @@
 <script>
 import morePostView from "../views/more-post-view.vue";
 export default {
-  components: { morePostView }
+  components: { morePostView },
+  props:{
+    category: {
+      required: true,
+      default: null
+    }
+  },
+  data(){
+    return {
+      posts: []
+    }
+  },
+  computed:{
+  },
+  methods:{
+    async fetchPostByCategory(){
+      const data = await this.$store.dispatch("posts/fetchPostByCategory", this.category.map(cat => {
+        return cat.id;
+      }));
+      this.posts = data;
+    }
+  },
+  watch:{
+    category:{
+      deep: true,
+      immediate: true,
+      handler(val){
+        if(val == null) return;
+        this.fetchPostByCategory();
+      }
+    }
+  }
 };
 </script>
 
