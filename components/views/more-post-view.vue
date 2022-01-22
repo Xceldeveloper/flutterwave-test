@@ -1,40 +1,83 @@
 <template>
-  <div class="more-post-view">
-    <img class="more-post-view__image" src="/images/dummy/big.svg" alt="" />
-    <div class="more-post-view-cover">
-      <div class="more-post-view__cat">
-        <span class="category">Front-end</span>
-        <app-dot-divider />
-        <span class="time">1 Hour Ago</span>
-      </div>
-      <div class="more-post-view__title">Css Grid</div>
-      <div class="more-post-view__article">
-        The CSS Grid Layout Module offers a grid-based layout system, with rows
-        and columns, making it easier to design web pages without having to use
-        floats and positioning.
-      </div>
-      <div class="more-post-view__action">
-        <span class="read-time"> 3 min Read</span>
+  <nuxt-link :to="`/${post.id}/${post.slug}`" v-if="post != null">
+    <div class="more-post-view">
+      <img class="more-post-view__image" :src="post.image" :alt="post.title" />
+      <div class="more-post-view-cover">
+        <div class="more-post-view__cat">
+          <span class="category">{{ category }}</span>
+          <app-dot-divider />
+          <span class="time">{{ fomatTime }}</span>
+        </div>
+        <div class="more-post-view__title" v-html="post.title"></div>
+        <div class="more-post-view__article" v-html="post.description"></div>
+        <div class="more-post-view__action">
+          <span class="read-time">
+            {{ getReadTime(post.content) }} min Read</span
+          >
 
-        <button class="read-full button">
-          Read Full
-
-          <span class="mdi mdi-arrow-right"></span>
-        </button>
+          <button class="read-full button">
+            Read Full
+            <span class="mdi mdi-arrow-right"></span>
+          </button>
+        </div>
       </div>
     </div>
-  </div>
+  </nuxt-link>
 </template>
 
 <script>
-export default {};
+import { formatDistance } from "date-fns";
+export default {
+  props: {
+    post: {
+      required: true,
+      default: null
+    }
+  },
+  data() {
+    return {
+      category: ""
+    };
+  },
+  methods: {
+    async fetchCategory() {
+      const data = await this.$store.dispatch(
+        "posts/getCategories",
+        this.post.id
+      );
+
+      console.log(JSON.stringify(data, null, 2));
+      this.category = data.map(cat => {
+        return cat.name;
+      })[0];
+    }
+  },
+  computed: {
+    fomatTime() {
+      return formatDistance(new Date(this.post.date), new Date(), {
+        addSuffix: true
+      });
+    }
+  },
+  watch: {
+    post: {
+      deep: true,
+      immediate: true,
+      handler(val) {
+        console.log(JSON.stringify(val, null, 2));
+        if (val == null) return;
+        this.fetchCategory();
+      }
+    }
+  }
+};
 </script>
 
 <style lang="scss" scoped>
 .more-post-view {
   background-color: #fff;
   width: 85%;
-  max-width: 320px;
+  width: pxToRem(200);
   padding: pxToRem(10);
   border-radius: pxToRem(5);
   display: inline-block;
@@ -43,14 +86,26 @@ export default {};
   box-shadow: 0px 1px 3px #e5e5e5;
   white-space: normal;
 
+  @include media-breakpoint-up(sm) {
+    width: pxToRem(280);
+  }
+
   &__image {
     width: 100%;
+    height: pxToRem(120);
     object-fit: cover;
     border-radius: inherit;
+
+      @include media-breakpoint-up(sm) {
+        height: pxToRem(180);
+      }
   }
 
   &__cat {
     margin-top: pxToRem(10);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 
     .category {
       color: $black30;
@@ -60,7 +115,8 @@ export default {};
 
     .time {
       color: $black20;
-      font-size: pxToRem(14);
+      font-size: pxToRem(12);
+      text-transform: capitalize;
     }
   }
 
@@ -68,17 +124,27 @@ export default {};
     font-weight: 600;
     font-size: pxToRem(18);
     color: $black;
-    margin-top: 10px;
+    margin-top: pxToRem(5);
+    @include max-line(2);
+
+    @include media-breakpoint-up(sm) {
+      margin-top: pxToRem(10);
+      @include max-line(2);
+    }
   }
 
   &__article {
     color: $black20;
-    margin: pxToRem(5) auto pxToRem(20) auto;
-    line-height: 21px;
+    display: none;
+
+    @include media-breakpoint-up(sm) {
+      display: block;
+      line-height: 21px;
+      @include max-line(1);
+    }
   }
 
   &__action {
-    margin-top: pxToRem(10);
     display: flex;
     justify-content: space-between;
     font-size: pxToRem(14);
@@ -89,9 +155,13 @@ export default {};
     }
 
     .read-full {
-      display: block;
+      display: none;
       color: $primary;
       font-weight: 600;
+
+      @include media-breakpoint-up(sm) {
+        display: block;
+      }
     }
   }
 }
