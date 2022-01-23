@@ -19,6 +19,14 @@ export const mutations = {
     state.posts = payload;
   },
 
+   SET_MORE_POSTS(state, payload) {
+     payload.forEach(post => {
+        state.posts.push(post);
+      });
+    //  state.posts.concat(payload);
+     console.log(state.posts.length);
+   },
+
   SET_VIEWING_POST(state, payload) {
     state.viewingPost = payload
   },
@@ -60,6 +68,37 @@ export const actions = {
       return Promise.reject(err);
     }
   },
+
+    async loadMorePosts({
+      commit
+    },offset) {
+      try {
+        const {
+          data
+        } = await this.$axios.get(
+          "https://techcrunch.com/wp-json/wp/v2/posts/?per_page=20&offset="+offset
+        );
+        //  console.log(JSON.stringify(data,null,2))
+        const posts = data.map(post => {
+          return {
+            id: post.id,
+            date: post.date_gmt,
+            slug: post.slug,
+            link: post.link,
+            title: post.title.rendered,
+            description: post.excerpt.rendered,
+            author: post.author,
+            content: post.content.rendered,
+            image: post.jetpack_featured_media_url
+          };
+        });
+        commit("SET_MORE_POSTS", posts);
+        return data;
+      } catch (err) {
+        console.log(JSON.stringify(err));
+        return Promise.reject(err);
+      }
+    },
 
   refreshPosts({state,dispatch}){
     if(process.env.NODE_ENV === 'development'){
