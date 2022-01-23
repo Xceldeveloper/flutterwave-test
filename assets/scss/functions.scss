@@ -37,6 +37,15 @@ $weights: (400, 500, 700);
   -webkit-box-orient: vertical;
 }
 
+@mixin maintain-ratio($ratio: 1 1) {
+  $width: 100%;
+  $height: percentage(nth($ratio, 2) / nth($ratio, 1));
+  
+  width: $width;
+  height: 0;
+  padding-bottom: $height;
+}
+
 // @for $i from 1 through 100 {
 //   .opacity-#{$i} {
 //     opacity: #{$i/100} !important;

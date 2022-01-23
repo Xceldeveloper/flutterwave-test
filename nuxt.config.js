@@ -37,7 +37,8 @@ export default {
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '~/plugins/globalize-components',
-    '~/plugins/utils-mixin'
+    '~/plugins/utils-mixin',
+    '~/plugins/vue-flutterwave'
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -46,6 +47,12 @@ export default {
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
   buildModules: [
   ],
+
+   //route change loader
+   loading: '~/components/views/app-loader.vue',
+
+     //default app loader
+     loadingIndicator: '~/components/loader.html',
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [

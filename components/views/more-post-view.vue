@@ -1,7 +1,10 @@
 <template>
   <nuxt-link :to="`/${post.id}/${post.slug}`" v-if="post != null">
     <div class="more-post-view">
-      <img class="more-post-view__image" :src="post.image" :alt="post.title" />
+      <div class="more-post-view__image">
+        <img v-if="isLoaded" ref="image" alt="" />
+        <app-shimmer v-else class="shimmer"></app-shimmer>
+      </div>
       <div class="more-post-view-cover">
         <div class="more-post-view__cat">
           <span class="category">{{ category }}</span>
@@ -36,7 +39,8 @@ export default {
   },
   data() {
     return {
-      category: ""
+      category: "",
+      isLoaded: false
     };
   },
   methods: {
@@ -46,10 +50,21 @@ export default {
         this.post.id
       );
 
-      console.log(JSON.stringify(data, null, 2));
+      //console.log(JSON.stringify(data, null, 2));
       this.category = data.map(cat => {
         return cat.name;
       })[0];
+    },
+
+    setImage() {
+      const image = new Image();
+      image.onload = () => {
+        this.isLoaded = true;
+        this.$nextTick(() => {
+          this.$refs.image.src = image.src;
+        });
+      };
+      image.src = this.post.image;
     }
   },
   computed: {
@@ -64,9 +79,10 @@ export default {
       deep: true,
       immediate: true,
       handler(val) {
-        console.log(JSON.stringify(val, null, 2));
+        // console.log(JSON.stringify(val, null, 2));
         if (val == null) return;
         this.fetchCategory();
+        this.setImage();
       }
     }
   }
@@ -92,13 +108,30 @@ export default {
 
   &__image {
     width: 100%;
-    height: pxToRem(120);
-    object-fit: cover;
-    border-radius: inherit;
+    height: pxToRem(150);
 
-      @include media-breakpoint-up(sm) {
-        height: pxToRem(180);
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: pxToRem(5);
+    }
+
+    @include media-breakpoint-up(sm) {
+      height: pxToRem(180);
+      overflow: hidden;
+
+      img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        border-radius: pxToRem(5);
+        &:hover {
+          transition: 0.6s all;
+          transform: scale(1.1);
+        }
       }
+    }
   }
 
   &__cat {
@@ -129,7 +162,7 @@ export default {
 
     @include media-breakpoint-up(sm) {
       margin-top: pxToRem(10);
-      @include max-line(2);
+      @include max-line(1);
     }
   }
 

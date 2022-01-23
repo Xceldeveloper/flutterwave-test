@@ -1,7 +1,10 @@
 <template>
-  <nuxt-link :to="`/${post.id}/${post.slug}`"  v-if="post !== false">
+  <nuxt-link :to="`/${post.id}/${post.slug}`" v-if="post !== false">
     <div class="featured-post">
-      <img class="featured-post__image" :src="post.image" alt="" />
+      <div class="featured-post__loader" v-if="!isLoaded">
+        <app-shimmer></app-shimmer>
+      </div>
+      <img class="featured-post__image" v-else ref="image" alt="" />
       <div class="featured-post__details">
         <div class="featured-post__details__head">
           <span class="category">{{ category }}</span>
@@ -16,10 +19,8 @@
           <span class="read-time">
             {{ getReadTime(post.content) }} min Read</span
           >
-
           <button class="read-full button">
             Read Full
-
             <span class="mdi mdi-arrow-right"></span>
           </button>
         </div>
@@ -34,7 +35,8 @@ import { formatDistance } from "date-fns";
 export default {
   data() {
     return {
-      category: ""
+      category: "",
+      isLoaded: false
     };
   },
   methods: {
@@ -44,10 +46,20 @@ export default {
         this.post.id
       );
 
-      // console.log(JSON.stringify(data, null, 2));
       this.category = data.map(cat => {
         return cat.name;
       })[0];
+    },
+
+    setImage() {
+      const image = new Image();
+      image.onload = () => {
+        this.isLoaded = true;
+        this.$nextTick(() => {
+          this.$refs.image.src = image.src;
+        });
+      };
+      image.src = this.post.image;
     }
   },
   computed: {
@@ -56,7 +68,7 @@ export default {
       if (this.posts.length == 0) {
         return false;
       }
-      return this.posts[Math.floor(Math.random() * this.posts.length -1) + 0]; 
+      return this.posts[Math.floor(Math.random() * this.posts.length - 1) + 0];
     },
     desc() {
       if (!this.post) {
@@ -86,6 +98,7 @@ export default {
       handler(val) {
         if (val !== null) {
           this.fetchCategory();
+          this.setImage();
         }
       }
     }
@@ -107,7 +120,25 @@ a {
 
   &__image {
     max-width: 100%;
-    border-radius: 10px;
+    border-radius: pxToRem(5);
+
+    @include media-breakpoint-up(lg) {
+      width: 40%;
+      height: pxToRem(300);
+      object-fit: cover;
+      border-radius: pxToRem(5);
+    }
+  }
+
+  &__loader {
+    width: 100%;
+    height: 30vh;
+    border-radius: pxToRem(5);
+
+    @include media-breakpoint-up(lg) {
+      width: 40%;
+      height: 300px;
+    }
   }
 
   &__details {
@@ -166,7 +197,7 @@ a {
         .article {
           color: $black20;
           display: block;
-          @include max-line(10)
+          @include max-line(10);
         }
       }
 
@@ -195,11 +226,7 @@ a {
       color: #fff;
     }
 
-    &__image {
-      max-width: 50%;
-      border-radius: pxToRem(5);
-    }
-
+ 
     &__details {
       display: flex;
       flex-direction: column;

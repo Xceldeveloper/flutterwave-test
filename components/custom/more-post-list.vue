@@ -1,9 +1,6 @@
 <template>
-<div class="more">
+<div class="more" v-if="posts.length > 0">
    <span class="more__title"  >More Articles</span>
-   {{this.category.map(cat => {
-        return cat.id;
-      })}}
     <div class="more__post-list">
      <more-post-view v-for="(post, index) in posts" :key="index" :post="post"  />
   </div>
