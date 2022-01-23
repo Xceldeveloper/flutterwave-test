@@ -12,7 +12,7 @@
           <span class="time">{{ fomatTime }}</span>
         </div>
         <div class="featured-post__details__body">
-          <div class="title">{{ post.title }}</div>
+          <div class="title" v-html="post.title"></div>
           <div class="article" v-html="post.description"></div>
         </div>
         <div class="featured-post__details__footer">
@@ -53,13 +53,15 @@ export default {
 
     setImage() {
       const image = new Image();
-      image.onload = () => {
-        this.isLoaded = true;
-        this.$nextTick(() => {
-         try{ this.$refs.image.src = image.src; } catch(e){}
-        });
-      };
-      image.src = this.post.image;
+      try {
+        image.onload = () => {
+          this.isLoaded = true;
+          this.$nextTick(() => {
+            this.$refs.image.src = image.src;
+          });
+        };
+        image.src = this.post.image;
+      } catch (err) {}
     }
   },
   computed: {
@@ -226,7 +228,6 @@ a {
       color: #fff;
     }
 
- 
     &__details {
       display: flex;
       flex-direction: column;
