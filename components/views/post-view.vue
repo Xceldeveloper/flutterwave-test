@@ -51,7 +51,7 @@ export default {
         this.post.id
       );
 
-      console.log(JSON.stringify(data, null, 2));
+     // console.log(JSON.stringify(data, null, 2));
       this.category = data.map(cat => {
         return cat.name;
       })[0];
@@ -113,15 +113,22 @@ a {
 
   &__image {
     max-width: 100%;
-    img {
       width: pxToRem(110);
       height: pxToRem(110);
-      object-fit: cover;
       border-radius: pxToRem(5);
+    
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+       border-radius: pxToRem(5);
+      
     }
 
     @include media-breakpoint-up(sm) {
       // @include aspect-ratio(16,9);
+      width:auto;
+      min-width: pxToRem(200);
       height: pxToRem(220);
 
       overflow: hidden;
