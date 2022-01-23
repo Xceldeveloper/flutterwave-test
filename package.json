@@ -18,6 +18,7 @@
     "flutterwave-vue-v3": "^1.0.5",
     "normalize.css": "^8.0.1",
     "nuxt": "^2.15.7",
+    "v-aspect-ratio": "^2.0.1",
     "vue-clickaway": "^2.2.2"
   },
   "devDependencies": {
