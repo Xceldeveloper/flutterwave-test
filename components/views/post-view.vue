@@ -2,7 +2,8 @@
   <nuxt-link :to="`/${post.id}/${post.slug}`" v-if="post != null">
     <div class="post-view">
       <div class="post-view__image">
-        <img :src="post.image" alt="" />
+        <img v-if="isLoaded" ref="image" alt="" />
+        <app-shimmer v-else class="shimmer"></app-shimmer>
       </div>
 
       <div class="post-view-cover">
@@ -12,7 +13,7 @@
           <span class="time">{{ fomatTime }}</span>
         </div>
         <div class="post-view__title" v-html="post.title"></div>
-        <div class="post-view__article" v-html="desc"></div>
+        <div class="post-view__article" v-html="post.description"></div>
         <div class="post-view__action">
           <span class="read-time">
             {{ getReadTime(post.content) }} min Read</span
@@ -20,7 +21,6 @@
 
           <button class="read-full button">
             Read Full
-
             <span class="mdi mdi-arrow-right"></span>
           </button>
         </div>
@@ -40,7 +40,8 @@ export default {
   },
   data() {
     return {
-      category: ""
+      category: "",
+      isLoaded: false
     };
   },
   methods: {
@@ -54,20 +55,20 @@ export default {
       this.category = data.map(cat => {
         return cat.name;
       })[0];
+    },
+
+    setImage() {
+      const image = new Image();
+      image.onload = () => {
+        this.isLoaded = true;
+        this.$nextTick(() => {
+          this.$refs.image.src = image.src;
+        });
+      };
+      image.src = this.post.image;
     }
   },
   computed: {
-    desc() {
-      if (this.post == null) {
-        return;
-      } else {
-        if (this.post.description.length > 200) {
-          return this.post.description.substring(0, 200) + "...";
-        }
-
-        return this.post.description;
-      }
-    },
     fomatTime() {
       return formatDistance(new Date(this.post.date), new Date(), {
         addSuffix: true
@@ -79,9 +80,10 @@ export default {
       deep: true,
       immediate: true,
       handler(val) {
-        console.log(JSON.stringify(val, null, 2));
+        // console.log(JSON.stringify(val, null, 2));
         if (val == null) return;
         this.fetchCategory();
+        this.setImage();
       }
     }
   }
@@ -109,8 +111,6 @@ a {
     display: block;
   }
 
-
-
   &__image {
     max-width: 100%;
     img {
@@ -122,18 +122,23 @@ a {
 
     @include media-breakpoint-up(sm) {
       // @include aspect-ratio(16,9);
+      height: pxToRem(220);
+
+      overflow: hidden;
       img {
         width: 100%;
         height: 100%;
+        &:hover {
+          transition: 0.6s all;
+          transform: scale(1.1);
+        }
       }
     }
   }
 
-
-
   &__cat {
     margin-top: pxToRem(5);
-    
+
     .category {
       color: $black30;
       font-weight: 700;
@@ -159,17 +164,13 @@ a {
     }
   }
 
-
-
   &__title {
     font-weight: 600;
     font-size: pxToRem(18);
     color: $black;
     @include max-line(3);
-       margin-top: pxToRem(5);
+    margin-top: pxToRem(5);
   }
-
-
 
   &__article {
     display: none;
@@ -179,11 +180,9 @@ a {
       display: block;
       margin: pxToRem(0) auto pxToRem(20) auto;
       line-height: 21px;
-      @include max-line(3);
+      @include max-line(2);
     }
   }
-
-
 
   &__action {
     display: none;
@@ -206,6 +205,5 @@ a {
       }
     }
   }
-
 }
 </style>
