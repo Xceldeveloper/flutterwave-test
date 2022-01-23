@@ -19,7 +19,7 @@ export default {
    },
    methods: {
      onChange(entry, obv) {
-      if(this.$store.state.posts.posts.length > 0 ){
+      if(this.$store.state.posts.posts.length > 0 && this.$store.state.posts.posts.length < 100 ){
         this.$store.dispatch('posts/loadMorePosts',this.$store.state.posts.posts.length+1)
       }
      }}
