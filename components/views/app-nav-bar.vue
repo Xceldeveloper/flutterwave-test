@@ -1,7 +1,9 @@
 <template>
   <div class="nav-bar">
     <div class=" nav-bar__content">
-      <img @click="$router.go(-1)" class="nav-bar__logo" src="/images/icon.png" />
+      <nuxt-link to="/">
+      <img  class="nav-bar__logo" src="/images/icon.png" />
+      </nuxt-link>
 
       <div class="nav-bar__actions">
         <img class="button" src="/icons/twitter-logo.svg" alt="" />
@@ -30,6 +32,7 @@ export default {};
 
   &__content {
     height: 100%;
+    width: 100vw;
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -39,6 +42,7 @@ export default {};
     .nav-bar__logo {
       height: pxToRem(50);
       width: pxToRem(50);
+      border-radius: pxToRem(5);
     }
 
     .nav-bar__actions {

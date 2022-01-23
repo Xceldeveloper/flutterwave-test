@@ -48,6 +48,12 @@ export default {
   buildModules: [
   ],
 
+   //route change loader
+   loading: '~/components/views/app-loader.vue',
+
+     //default app loader
+     loadingIndicator: '~/components/loader.html',
+
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
     // https://go.nuxtjs.dev/pwa
