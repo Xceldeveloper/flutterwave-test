@@ -56,7 +56,7 @@ export default {
       image.onload = () => {
         this.isLoaded = true;
         this.$nextTick(() => {
-          this.$refs.image.src = image.src;
+         try{ this.$refs.image.src = image.src; } catch(e){}
         });
       };
       image.src = this.post.image;

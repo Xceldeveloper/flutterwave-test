@@ -45,7 +45,8 @@ export default {
   },
   methods: {
     async fetchCategory() {
-      const data = await this.$store.dispatch(
+      try{
+         const data = await this.$store.dispatch(
         "posts/getCategories",
         this.post.id
       );
@@ -54,6 +55,9 @@ export default {
       this.category = data.map(cat => {
         return cat.name;
       })[0];
+      }catch(err){
+        console.log(JOSN.stringify(err, null, 2));
+      }
     },
 
     setImage() {
@@ -61,7 +65,7 @@ export default {
       image.onload = () => {
         this.isLoaded = true;
         this.$nextTick(() => {
-          this.$refs.image.src = image.src;
+         try{ this.$refs.image.src = image.src; } catch(e){}
         });
       };
       image.src = this.post.image;
