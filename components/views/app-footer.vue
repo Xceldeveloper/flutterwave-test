@@ -46,11 +46,11 @@ export default {
   },
   methods: {
     makePaymentCallback(response) {
-      console.log("Pay", response);
-      this.$refs.flutterwave.closePaymentModal(5);
+    //  console.log("Pay", response);
+      this.closePaymentModal(5);
     },
     closedPaymentModal() {
-      console.log("payment is closed");
+     // console.log("payment is closed");
     },
     generateReference() {
       let date = new Date();
