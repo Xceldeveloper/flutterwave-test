@@ -51,7 +51,7 @@ export default {
         this.post.id
       );
 
-     // console.log(JSON.stringify(data, null, 2));
+      // console.log(JSON.stringify(data, null, 2));
       this.category = data.map(cat => {
         return cat.name;
       })[0];
@@ -59,13 +59,15 @@ export default {
 
     setImage() {
       const image = new Image();
-      image.onload = () => {
-        this.isLoaded = true;
-        this.$nextTick(() => {
-          this.$refs.image.src = image.src;
-        });
-      };
-      image.src = this.post.image;
+      try {
+        image.onload = () => {
+          this.isLoaded = true;
+          this.$nextTick(() => {
+            this.$refs.image.src = image.src;
+          });
+        };
+        image.src = this.post.image;
+      } catch (err) {}
     }
   },
   computed: {
@@ -113,21 +115,20 @@ a {
 
   &__image {
     max-width: 100%;
-      width: pxToRem(110);
-      height: pxToRem(110);
-      border-radius: pxToRem(5);
-    
+    width: pxToRem(110);
+    height: pxToRem(110);
+    border-radius: pxToRem(5);
+
     img {
       width: 100%;
       height: 100%;
       object-fit: cover;
-       border-radius: pxToRem(5);
-      
+      border-radius: pxToRem(5);
     }
 
     @include media-breakpoint-up(sm) {
       // @include aspect-ratio(16,9);
-      width:auto;
+      width: auto;
       min-width: pxToRem(200);
       height: pxToRem(220);
 

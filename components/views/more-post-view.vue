@@ -45,26 +45,32 @@ export default {
   },
   methods: {
     async fetchCategory() {
-      const data = await this.$store.dispatch(
-        "posts/getCategories",
-        this.post.id
-      );
+      try {
+        const data = await this.$store.dispatch(
+          "posts/getCategories",
+          this.post.id
+        );
 
-      //console.log(JSON.stringify(data, null, 2));
-      this.category = data.map(cat => {
-        return cat.name;
-      })[0];
+        //console.log(JSON.stringify(data, null, 2));
+        this.category = data.map(cat => {
+          return cat.name;
+        })[0];
+      } catch (err) {
+        console.log(JOSN.stringify(err, null, 2));
+      }
     },
 
     setImage() {
       const image = new Image();
-      image.onload = () => {
-        this.isLoaded = true;
-        this.$nextTick(() => {
-          this.$refs.image.src = image.src;
-        });
-      };
-      image.src = this.post.image;
+      try {
+        image.onload = () => {
+          this.isLoaded = true;
+          this.$nextTick(() => {
+            this.$refs.image.src = image.src;
+          });
+        };
+        image.src = this.post.image;
+      } catch (e) {}
     }
   },
   computed: {
